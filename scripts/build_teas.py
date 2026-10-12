@@ -59,7 +59,7 @@ def main():
 <div class="wrap">
   <header class="top">
     <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Сьорбати Можна</span></a>
-    <nav class="nav" aria-label="Розділи"><a href="index.html#modules">Усі модулі</a><a class="ig" href="https://www.instagram.com/siorbaty.mozhna/" target="_blank" rel="noopener">{IG}<span>Instagram</span></a></nav>
+    <nav class="nav" aria-label="Розділи"><a href="index.html#modules">Усі модулі</a><a class="nav-teas" href="vydy-chaiu.html" aria-current="page">Види чаю</a><a class="ig" href="https://www.instagram.com/siorbaty.mozhna/" target="_blank" rel="noopener">{IG}<span>Instagram</span></a></nav>
   </header>
 
   <div class="mod-hero">

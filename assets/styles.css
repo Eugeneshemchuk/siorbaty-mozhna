@@ -48,6 +48,7 @@ button{font:inherit;color:inherit}
 .nav{display:flex;gap:26px}
 .nav a{color:var(--muted);text-decoration:none;font-size:.88rem}
 .nav a:hover{color:var(--accent)}
+.nav a[aria-current="page"]{color:var(--ink)}
 .ig{display:inline-flex;align-items:center;gap:7px}
 .ig svg{width:17px;height:17px}
 footer a{color:var(--muted);text-decoration:none;font-size:.88rem}
@@ -203,9 +204,9 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;display:flex;jus
   .hero,.mod-layout{grid-template-columns:1fr}
   .hero .media{height:min(70svh,600px);justify-self:center}
   .icons{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .row{grid-template-columns:3.5rem 1fr 1.5rem}
+  .row{grid-template-columns:3.5rem minmax(0,1fr) 1.5rem}
   .row p,.row .state{grid-column:2/3}
-  .nav a:not(.ig){display:none}
+  .nav a:not(.ig):not(.nav-teas){display:none}
   .steeps{grid-template-columns:repeat(3,minmax(0,1fr))}
   .steeps div:nth-child(n+4){display:none}
   .mod-hero{grid-template-columns:1fr}
@@ -330,3 +331,18 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;display:flex;jus
 .mod-hero::before{width:clamp(240px,30vw,420px);left:-6%;bottom:-6%}
 @media screen and (max-width:900px){.hero::before{width:120vw;left:-35%;top:-4%}}
 @media print{.hero::before,.mod-hero::before{display:none}}
+
+/* header nav: keep links on one line; on small phones Instagram shows as an icon (label kept for screen readers) */
+.nav a{white-space:nowrap}
+@media screen and (max-width:420px){
+  .nav{gap:18px}
+  .top .ig span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .top .ig svg{width:20px;height:20px}
+}
+/* phones: scale the big uppercase headlines with the screen so long words (ЗНАЙОМСТВО, ПОВІЛЬНО.) aren't clipped */
+@media screen and (max-width:600px){
+  .hero h1{font-size:clamp(2.2rem,12.5vw,3.4rem)}
+  .mod-hero h1{font-size:clamp(1.9rem,10vw,3.2rem)}
+  .row h3{font-size:clamp(1.6rem,8.4vw,2.3rem)}
+  .tea-title h2{font-size:clamp(1.9rem,10vw,2.4rem)}
+}
