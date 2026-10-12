@@ -1,0 +1,186 @@
+[
+ {
+  "id": "p01",
+  "src": "assets/img/p01.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "2026-10-09 21.54.11.jpeg",
+  "kb": 32
+ },
+ {
+  "id": "p02",
+  "src": "assets/img/p02.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "2026-10-09 21.54.24.jpeg",
+  "kb": 35
+ },
+ {
+  "id": "p03",
+  "src": "assets/img/p03.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215956_233.jpeg",
+  "kb": 76
+ },
+ {
+  "id": "p04",
+  "src": "assets/img/p04.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215956_324.jpeg",
+  "kb": 87
+ },
+ {
+  "id": "p05",
+  "src": "assets/img/p05.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215956_334.jpeg",
+  "kb": 51
+ },
+ {
+  "id": "p06",
+  "src": "assets/img/p06.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215956_545.jpeg",
+  "kb": 104
+ },
+ {
+  "id": "p07",
+  "src": "assets/img/p07.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215956_761.jpeg",
+  "kb": 71
+ },
+ {
+  "id": "p08",
+  "src": "assets/img/p08.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215957_031.jpeg",
+  "kb": 88
+ },
+ {
+  "id": "p09",
+  "src": "assets/img/p09.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215957_114.jpeg",
+  "kb": 71
+ },
+ {
+  "id": "p10",
+  "src": "assets/img/p10.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215957_147.jpeg",
+  "kb": 44
+ },
+ {
+  "id": "p11",
+  "src": "assets/img/p11.webp",
+  "w": 1200,
+  "h": 1600,
+  "source": "IMG_20261009_215957_185.jpeg",
+  "kb": 146
+ },
+ {
+  "id": "p12",
+  "src": "assets/img/p12.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215957_186.jpeg",
+  "kb": 77
+ },
+ {
+  "id": "p13",
+  "src": "assets/img/p13.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215957_315.jpeg",
+  "kb": 34
+ },
+ {
+  "id": "p14",
+  "src": "assets/img/p14.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215957_475.jpeg",
+  "kb": 54
+ },
+ {
+  "id": "p15",
+  "src": "assets/img/p15.webp",
+  "w": 1067,
+  "h": 1600,
+  "source": "IMG_20261009_215957_664.jpeg",
+  "kb": 87
+ },
+ {
+  "id": "p16",
+  "src": "assets/img/p16.webp",
+  "w": 1200,
+  "h": 1600,
+  "source": "IMG_20261009_215957_762.jpeg",
+  "kb": 131
+ },
+ {
+  "id": "p17",
+  "src": "assets/img/p17.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "photo_2026-10-09 21.54.41.jpeg",
+  "kb": 40
+ },
+ {
+  "id": "p18",
+  "src": "assets/img/p18.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "photo_2026-10-09 21.54.48.jpeg",
+  "kb": 34
+ },
+ {
+  "id": "p19",
+  "src": "assets/img/p19.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "photo_2026-10-09 21.54.55.jpeg",
+  "kb": 41
+ },
+ {
+  "id": "p20",
+  "src": "assets/img/p20.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "photo_2026-10-09 21.55.01.jpeg",
+  "kb": 80
+ },
+ {
+  "id": "p21",
+  "src": "assets/img/p21.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "photo_2026-10-09 21.55.13.jpeg",
+  "kb": 22
+ },
+ {
+  "id": "p22",
+  "src": "assets/img/p22.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "photo_2026-10-09 21.55.48.jpeg",
+  "kb": 39
+ },
+ {
+  "id": "p23",
+  "src": "assets/img/p23.webp",
+  "w": 853,
+  "h": 1280,
+  "source": "photo_2026-10-12 10.43.15.jpeg",
+  "kb": 56
+ }
+]

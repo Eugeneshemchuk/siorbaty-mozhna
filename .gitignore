@@ -1,0 +1,11 @@
+# build output (recreated by scripts/deploy.sh)
+dist/
+# Cloudflare Wrangler cache
+.wrangler/
+# OS / editor / Python noise
+.DS_Store
+__pycache__/
+*.pyc
+# private: source content (own local repo, never published) and unused purchased-art derivatives
+Content/
+assets/illustrations/sprig-*.png
