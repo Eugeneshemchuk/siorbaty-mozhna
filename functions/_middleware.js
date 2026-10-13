@@ -8,6 +8,11 @@ const PRIVATE = [/^\/module(\.html)?$/, /^\/vydy-chaiu(\.html)?$/, /^\/voda(\.ht
 
 export async function onRequest({ request, env, next }) {
   const url = new URL(request.url);
+  // One canonical host, so the login cookie isn't split between www and the bare domain
+  if (url.hostname === 'www.siorbaty-mozhna.com') {
+    url.hostname = 'siorbaty-mozhna.com';
+    return Response.redirect(url.toString(), 301);
+  }
   if (!gated(env, request.url) || !PRIVATE.some(r => r.test(url.pathname))) return next();
   if (await currentUser(request, env)) {
     const res = await next(); // logged-in content must not sit in shared caches
