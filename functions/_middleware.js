@@ -8,8 +8,9 @@ const PRIVATE = [/^\/module(\.html)?$/, /^\/vydy-chaiu(\.html)?$/, /^\/voda(\.ht
 
 export async function onRequest({ request, env, next }) {
   const url = new URL(request.url);
-  // One canonical host, so the login cookie isn't split between www and the bare domain
-  if (url.hostname === 'www.siorbaty-mozhna.com') {
+  // One canonical host: pages.dev (incl. preview deployments) is retired, and www would split the login cookie
+  if (url.hostname === 'www.siorbaty-mozhna.com' || url.hostname.endsWith('.pages.dev')) {
+    url.protocol = 'https:'; url.port = '';
     url.hostname = 'siorbaty-mozhna.com';
     return Response.redirect(url.toString(), 301);
   }

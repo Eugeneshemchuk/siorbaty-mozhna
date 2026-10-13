@@ -272,7 +272,7 @@
 
   /* ---------- boot ---------- */
   const list = $('#moduleList'), grid = $('#iconGrid'), mod = $('#module'), auth = $('#auth'), nav = $('.top .nav');
-  // login exists only on the final domain; siorbaty-mozhna.pages.dev stays open (AUTH_HOSTS in wrangler.toml)
+  // login exists only on the final domain (AUTH_HOSTS in wrangler.toml); pages.dev redirects there
   const GATED = /(^|\.)siorbaty-mozhna\.com$/.test(location.hostname) || location.hostname === 'localhost';
   if (nav && GATED) accountLink(nav);
   if (auth) authPage(auth);

@@ -6,7 +6,7 @@ compatibility_date = "2026-09-01"
 [vars]
 # Sender for verification / reset emails, sent through Resend (resend.com). The domain must be verified there.
 MAIL_FROM = "Сьорбати Можна <noreply@siorbaty-mozhna.com>"
-# Hosts where the course needs a login. Everywhere else (siorbaty-mozhna.pages.dev, previews) stays open.
+# Hosts where the course needs a login. *.pages.dev redirects to siorbaty-mozhna.com (functions/_middleware.js).
 AUTH_HOSTS = "siorbaty-mozhna.com,www.siorbaty-mozhna.com,localhost"
 # Secret (set with `npx wrangler pages secret put RESEND_API_KEY --project-name siorbaty-mozhna`): RESEND_API_KEY.
 # Without it the links are only logged (local dev: printed by `wrangler pages dev`).
