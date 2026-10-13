@@ -78,6 +78,9 @@
     });
   }
 
+  /* Ukrainian plural: 1 урок, 3 уроки, 13 уроків */
+  const lessonsWord = n => (n % 10 === 1 && n % 100 !== 11) ? 'урок' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 'уроки' : 'уроків';
+
   /* ---------- home ---------- */
   async function renderHome(list) {
     const mods = await getJSON('modules/index.json');
@@ -87,7 +90,7 @@
       const taken = L.map((l, k) => store.get(`${m.id}:q${k}`)).filter(Boolean);
       const quiz = taken.length ? `${taken.reduce((a, t) => a + +t.split('/')[0], 0)}/${taken.reduce((a, t) => a + +t.split('/')[1], 0)}` : '';
       const state = m.ready
-        ? `<div class="state"><span class="label">${d} / ${n} уроків${quiz ? ' · тести ' + esc(quiz) : ''}</span><div class="bar"><i style="--p:${n ? d / n * 100 : 0}%"></i></div></div>`
+        ? `<div class="state"><span class="label">${d} / ${n} ${lessonsWord(n)}${quiz ? ' · тести ' + esc(quiz) : ''}</span><div class="bar"><i style="--p:${n ? d / n * 100 : 0}%"></i></div></div>`
         : `<div class="state"><span class="label">Скоро</span></div>`;
       const inner = `<span class="n">${m.id}</span><h3>${esc(m.title)}</h3><p>${esc(m.teaser)}</p>${state}${m.ready ? ARROW : '<span></span>'}`;
       return m.ready ? `<li class="reveal"><a class="row" href="module.html#${m.id}">${inner}</a></li>` : `<li class="row soon reveal">${inner}</li>`;
@@ -117,7 +120,7 @@
           <p class="label">Модуль ${esc(mod.id)} з ${String(mods.length).padStart(2, '0')}</p>
           <h1><span class="ln"><span>${esc(mod.title)}</span></span></h1>
           <p class="intro">${esc(mod.intro)}</p>
-          <div class="mod-meta"><span class="label">${L.length} уроків</span><span class="label">Тест після кожного уроку</span></div>
+          <div class="mod-meta"><span class="label">${L.length} ${lessonsWord(L.length)}</span><span class="label">Тест після кожного уроку</span></div>
         </div>
       </div>
       <div class="mod-layout">
@@ -136,7 +139,6 @@
             ${l.points?.length ? `<div style="display:grid;gap:12px"><span class="label">Головне</span><ul class="points">${l.points.map(p => `<li>${LEAF}<span>${esc(p)}</span></li>`).join('')}</ul></div>` : ''}
             ${(l.links || []).map(k => `<a class="lesson-link" href="${esc(k.href)}"><div><span class="label">${esc(k.kicker || 'Довідник')}</span><h3>${esc(k.label)}</h3></div>${ARROW}</a>`).join('')}
             ${l.images?.length ? `<div class="gallery">${l.images.map((im, k) => `<figure class="reveal"><div class="media">${imgHTML(im, `урок ${i + 1} · ${k + 1}`)}</div>${im.caption ? `<figcaption>${esc(im.caption)}</figcaption>` : ''}</figure>`).join('')}</div>` : ''}
-            <details class="transcript"><summary><span class="label">Транскрипт</span></summary><div class="txt">${l.transcript ? esc(l.transcript) : 'Транскрипт з’явиться пізніше.'}</div></details>
             ${l.quiz?.length ? `<div class="lesson-quiz"><span class="label">Перевірте себе · ${l.quiz.length} питання</span><div class="quiz" id="quiz-${i}"></div></div>` : ''}
             <div class="lesson-foot"><button type="button" class="cta" data-done="${i}" aria-pressed="false">Позначити як переглянутий</button>
             ${i < L.length - 1 ? `<button type="button" class="cta" data-go="${i + 1}" style="border-color:var(--line);color:var(--muted)">Наступний урок ${ARROW}</button>` : ''}</div>
@@ -152,7 +154,7 @@
         $(`#toc-${i}`).classList.toggle('done', on);
         const b = $(`[data-done="${i}"]`); b.setAttribute('aria-pressed', on); b.textContent = on ? 'Переглянуто' : 'Позначити як переглянутий';
       });
-      $('#progLabel').textContent = `${d} / ${L.length} уроків`;
+      $('#progLabel').textContent = `${d} / ${L.length} ${lessonsWord(L.length)}`;
       $('#progBar').style.setProperty('--p', `${d / L.length * 100}%`);
     };
     root.addEventListener('click', e => {
