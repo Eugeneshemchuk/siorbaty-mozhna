@@ -266,6 +266,7 @@
     });
     const h = location.hash;
     if (h.startsWith('#reset=')) { token = h.slice(7); history.replaceState(null, '', location.pathname); set('reset'); }
+    else if (h === '#register') set('register');
     else if (h === '#expired') { set('register'); say('Посилання застаріло або вже використане. Зареєструйтеся ще раз, щоб отримати новий лист.', true); }
     else set('login');
   }

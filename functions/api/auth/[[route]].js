@@ -9,6 +9,7 @@
    Register/forgot answer the same way whether or not the email is known, so the student list can't be probed. */
 import { gated, now, normEmail, validEmail, randomToken, sha256, hashPassword, sameString,
   getCookie, SESSION_COOKIE, sessionCookie, currentUser, createSession } from '../../_lib/auth.js';
+import { sendEmail } from '../../_lib/mail.js';
 
 const LINK_HOURS = { verify: 48, reset: 2 };
 const RESEND_GAP = 60e3;          // at most one email per address per minute
@@ -41,13 +42,7 @@ async function sendLink(env, origin, email, kind) {
 <p><a href="${link}" style="display:inline-block;padding:12px 22px;border:1px solid #5E6549;border-radius:999px;color:#5E6549;text-decoration:none">${cta}</a></p>
 <p style="color:#7A7570;font-size:13px">Якщо кнопка не працює, відкрийте посилання:<br>${link}</p>
 <p style="color:#7A7570;font-size:13px">Якщо це були не ви, просто проігноруйте цей лист.</p></div>`;
-  if (!env.RESEND_API_KEY) { console.log(`[auth] ${kind} link for ${email}: ${link}`); return; }
-  const r = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: env.MAIL_FROM, to: email, subject, text, html }),
-  });
-  if (!r.ok) console.error('[auth] email send failed', r.status, await r.text());
+  await sendEmail(env, { to: email, subject, text, html }, `${kind} link: ${link}`);
 }
 
 async function takeToken(env, token, kind) {

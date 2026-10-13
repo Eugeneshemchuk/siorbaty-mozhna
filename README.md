@@ -18,6 +18,8 @@ Everything except the home page needs an account. Only emails on the allowed lis
 ```sh
 sh scripts/students.sh add student@example.com   # allow a student (also: remove, list)
 ```
+Or through the Telegram bot (`functions/api/telegram.js`): send it one or more emails to add students (each gets an invite email), `/remove`, `/invite`, `/list`. Set it up once with `sh scripts/telegram-setup.sh`; only Telegram IDs in `TELEGRAM_ADMINS` (`wrangler.toml`) can use it.
+
 Emails go through Resend from `siorbaty-mozhna.com` (secret `RESEND_API_KEY`). Locally (`npx wrangler pages dev dist`, `--local` for students.sh) the links are printed to the console instead.
 
 ## Deploy

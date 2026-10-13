@@ -10,6 +10,9 @@ MAIL_FROM = "Сьорбати Можна <noreply@siorbaty-mozhna.com>"
 AUTH_HOSTS = "siorbaty-mozhna.com,www.siorbaty-mozhna.com,localhost"
 # Secret (set with `npx wrangler pages secret put RESEND_API_KEY --project-name siorbaty-mozhna`): RESEND_API_KEY.
 # Without it the links are only logged (local dev: printed by `wrangler pages dev`).
+# Telegram user IDs allowed to manage students through the bot (functions/api/telegram.js), comma-separated.
+# Its webhook secret TELEGRAM_SECRET is set by scripts/telegram-setup.sh.
+TELEGRAM_ADMINS = ""
 
 [[d1_databases]]
 binding = "DB"
