@@ -8,6 +8,7 @@ const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 export const SESSION_COOKIE = 'sid';
 export const SESSION_DAYS = 30;
 export const now = () => Date.now();
+export const gated = (env, url) => String(env.AUTH_HOSTS || '').split(',').map(h => h.trim()).includes(new URL(url).hostname);
 export const normEmail = e => String(e || '').trim().toLowerCase();
 export const validEmail = e => e.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 

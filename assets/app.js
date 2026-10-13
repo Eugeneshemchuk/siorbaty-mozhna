@@ -272,7 +272,9 @@
 
   /* ---------- boot ---------- */
   const list = $('#moduleList'), grid = $('#iconGrid'), mod = $('#module'), auth = $('#auth'), nav = $('.top .nav');
-  if (nav) accountLink(nav);
+  // login exists only on the final domain; siorbaty-mozhna.pages.dev stays open (AUTH_HOSTS in wrangler.toml)
+  const GATED = /(^|\.)siorbaty-mozhna\.com$/.test(location.hostname) || location.hostname === 'localhost';
+  if (nav && GATED) accountLink(nav);
   if (auth) authPage(auth);
   if (list) renderHome(list).catch(() => { list.innerHTML = '<li class="row"><p>Не вдалося завантажити модулі.</p></li>'; });
   if (grid) renderIcons(grid).catch(() => {});

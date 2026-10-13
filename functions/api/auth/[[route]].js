@@ -7,7 +7,7 @@
      POST /api/auth/logout
      GET  /api/auth/me                           {email} or 401
    Register/forgot answer the same way whether or not the email is known, so the student list can't be probed. */
-import { now, normEmail, validEmail, randomToken, sha256, hashPassword, sameString,
+import { gated, now, normEmail, validEmail, randomToken, sha256, hashPassword, sameString,
   getCookie, SESSION_COOKIE, sessionCookie, currentUser, createSession } from '../../_lib/auth.js';
 
 const LINK_HOURS = { verify: 48, reset: 2 };
@@ -137,7 +137,7 @@ export async function onRequest(ctx) {
   const { request, params } = ctx;
   const url = new URL(request.url);
   const route = routes[`${request.method} ${(params.route || []).join('/')}`];
-  if (!route) return fail('Not found', 404);
+  if (!route || !gated(ctx.env, request.url)) return fail('Not found', 404);
   // CSRF: state-changing calls must come from our own pages
   if (request.method === 'POST' && request.headers.get('Origin') !== url.origin) return fail('Bad origin', 403);
   try { return await route(ctx, url.origin); }

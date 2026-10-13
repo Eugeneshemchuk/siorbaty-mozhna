@@ -1,13 +1,14 @@
-/* Gate the course behind login. The home page, login page, auth API and shared assets stay public;
-   lessons, reference pages, PDFs and course photos need a session (functions/_lib/auth.js). */
-import { currentUser } from './_lib/auth.js';
+/* Gate the course behind login on the hosts listed in AUTH_HOSTS (wrangler.toml); other hosts stay open.
+   The home page, login page, auth API and shared assets stay public; lessons, reference pages, PDFs and
+   course photos need a session (functions/_lib/auth.js). */
+import { currentUser, gated } from './_lib/auth.js';
 
 const PRIVATE = [/^\/module(\.html)?$/, /^\/vydy-chaiu(\.html)?$/, /^\/voda(\.html)?$/,
   /^\/modules\/(?!index\.json$)/, /^\/assets\/.*\.pdf$/, /^\/assets\/img\//];
 
 export async function onRequest({ request, env, next }) {
   const url = new URL(request.url);
-  if (!PRIVATE.some(r => r.test(url.pathname))) return next();
+  if (!gated(env, request.url) || !PRIVATE.some(r => r.test(url.pathname))) return next();
   if (await currentUser(request, env)) {
     const res = await next(); // logged-in content must not sit in shared caches
     const out = new Response(res.body, res);
