@@ -9,7 +9,7 @@
    Register/forgot answer the same way whether or not the email is known, so the student list can't be probed. */
 import { gated, now, normEmail, validEmail, randomToken, sha256, hashPassword, sameString,
   getCookie, SESSION_COOKIE, sessionCookie, currentUser, createSession } from '../../_lib/auth.js';
-import { sendEmail } from '../../_lib/mail.js';
+import { sendEmail, emailLayout } from '../../_lib/mail.js';
 
 const LINK_HOURS = { verify: 48, reset: 2 };
 const RESEND_GAP = 60e3;          // at most one email per address per minute
@@ -33,15 +33,16 @@ async function sendLink(env, origin, email, kind) {
       .bind(await sha256(token), email, kind, now() + LINK_HOURS[kind] * 3600e3, now()),
   ]);
   const link = kind === 'verify' ? `${origin}/api/auth/verify?token=${token}` : `${origin}/login#reset=${token}`;
-  const [subject, line, cta] = kind === 'verify'
-    ? ['Підтвердіть email · Сьорбати Можна', 'Щоб завершити реєстрацію на курсі, підтвердіть свою адресу.', 'Підтвердити email']
-    : ['Новий пароль · Сьорбати Можна', 'Ви попросили змінити пароль до курсу. Посилання діє 2 години.', 'Створити новий пароль'];
-  const text = `${line}\n\n${cta}: ${link}\n\nЯкщо це були не ви, просто проігноруйте цей лист.\n\nСьорбати Можна · Школа чаю`;
-  const html = `<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:24px;color:#24211F">
-<p style="font-size:20px">Сьорбати Можна</p><p>${line}</p>
-<p><a href="${link}" style="display:inline-block;padding:12px 22px;border:1px solid #5E6549;border-radius:999px;color:#5E6549;text-decoration:none">${cta}</a></p>
-<p style="color:#7A7570;font-size:13px">Якщо кнопка не працює, відкрийте посилання:<br>${link}</p>
-<p style="color:#7A7570;font-size:13px">Якщо це були не ви, просто проігноруйте цей лист.</p></div>`;
+  const m = kind === 'verify'
+    ? { subject: 'Підтвердіть email · Сьорбати Можна', preheader: 'Один клік, і реєстрацію на курсі завершено.',
+        title: 'Підтвердіть <em>email</em>', body: 'Щоб завершити реєстрацію на курсі «Сьорбати Можна», підтвердіть свою адресу.',
+        cta: 'Підтвердити email', note: 'Посилання діє 48 годин. Якщо ви не реєструвалися, просто проігноруйте цей лист.' }
+    : { subject: 'Новий пароль · Сьорбати Можна', preheader: 'Посилання для зміни пароля діє 2 години.',
+        title: 'Новий <em>пароль</em>', body: 'Ви попросили змінити пароль до курсу. Натисніть кнопку і придумайте новий.',
+        cta: 'Створити новий пароль', note: 'Посилання діє 2 години. Якщо це були не ви, просто проігноруйте лист: пароль не зміниться.' };
+  const { subject } = m;
+  const text = `${m.body}\n\n${m.cta}:\n${link}\n\n${m.note}\n\n—\nСьорбати Можна · Школа чаю`;
+  const html = emailLayout({ ...m, link });
   await sendEmail(env, { to: email, subject, text, html }, `${kind} link: ${link}`);
 }
 

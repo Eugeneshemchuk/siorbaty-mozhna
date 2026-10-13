@@ -7,7 +7,7 @@
    Telegram proves each call with the secret TELEGRAM_SECRET (set by scripts/telegram-setup.sh).
    Replies go back in the webhook response, so the bot token itself is never stored on the site. */
 import { now, normEmail, validEmail, sameString } from '../_lib/auth.js';
-import { sendEmail } from '../_lib/mail.js';
+import { sendEmail, emailLayout } from '../_lib/mail.js';
 
 const HELP = `Надішліть email (або кілька), щоб додати учнів. Кожен новий отримає лист-запрошення.
 
@@ -22,13 +22,15 @@ const ok = () => new Response('ok');
 
 async function invite(env, origin, email) {
   const link = `${origin}/login#register`;
-  const line = 'Вас додано до онлайн-курсу «Сьорбати Можна». Щоб відкрити уроки, зареєструйтеся з цією адресою email і придумайте пароль.';
-  const text = `${line}\n\nЗареєструватися: ${link}\n\nЯкщо ви вже зареєстровані, просто увійдіть.\n\nСьорбати Можна · Школа чаю`;
-  const html = `<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:24px;color:#24211F">
-<p style="font-size:20px">Сьорбати Можна</p><p>${line}</p>
-<p><a href="${link}" style="display:inline-block;padding:12px 22px;border:1px solid #5E6549;border-radius:999px;color:#5E6549;text-decoration:none">Зареєструватися</a></p>
-<p style="color:#7A7570;font-size:13px">Якщо кнопка не працює, відкрийте посилання:<br>${link}</p>
-<p style="color:#7A7570;font-size:13px">Якщо ви вже зареєстровані, просто увійдіть.</p></div>`;
+  const m = {
+    preheader: 'Вас додано до курсу. Зареєструйтеся, щоб відкрити уроки.',
+    title: 'Ласкаво просимо <em>до курсу</em>',
+    body: 'Вас додано до онлайн-курсу «Сьорбати Можна». Ось як почати:',
+    steps: ['Зареєструйтеся з цією адресою email і придумайте пароль.', 'Підтвердіть email за посиланням із листа.',
+      'Відкрийте модуль 01 і дивіться уроки у своєму темпі.'],
+    cta: 'Зареєструватися', note: 'Якщо ви вже зареєстровані, просто увійдіть.' };
+  const text = `${m.body}\n\n${m.steps.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n\n${m.cta}:\n${link}\n\n${m.note}\n\n—\nСьорбати Можна · Школа чаю`;
+  const html = emailLayout({ ...m, link });
   return sendEmail(env, { to: email, subject: 'Запрошення на курс · Сьорбати Можна', text, html }, `invite: ${link}`);
 }
 
