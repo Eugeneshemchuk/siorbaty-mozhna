@@ -18,7 +18,7 @@ Everything except the home page needs an account. Only emails on the allowed lis
 ```sh
 sh scripts/students.sh add student@example.com   # allow a student (also: remove, list)
 ```
-Emails go through Cloudflare Email Sending from `siorbaty-mozhna.com` (secrets `CF_ACCOUNT_ID`, `CF_EMAIL_TOKEN`). Locally (`npx wrangler pages dev dist`, `--local` for students.sh) the links are printed to the console instead.
+Emails go through Resend from `siorbaty-mozhna.com` (secret `RESEND_API_KEY`). Locally (`npx wrangler pages dev dist`, `--local` for students.sh) the links are printed to the console instead.
 
 ## Deploy
 ```sh

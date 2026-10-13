@@ -41,10 +41,10 @@ async function sendLink(env, origin, email, kind) {
 <p><a href="${link}" style="display:inline-block;padding:12px 22px;border:1px solid #5E6549;border-radius:999px;color:#5E6549;text-decoration:none">${cta}</a></p>
 <p style="color:#7A7570;font-size:13px">Якщо кнопка не працює, відкрийте посилання:<br>${link}</p>
 <p style="color:#7A7570;font-size:13px">Якщо це були не ви, просто проігноруйте цей лист.</p></div>`;
-  if (!env.CF_EMAIL_TOKEN) { console.log(`[auth] ${kind} link for ${email}: ${link}`); return; }
-  const r = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/email/sending/send`, {
+  if (!env.RESEND_API_KEY) { console.log(`[auth] ${kind} link for ${email}: ${link}`); return; }
+  const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${env.CF_EMAIL_TOKEN}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ from: env.MAIL_FROM, to: email, subject, text, html }),
   });
   if (!r.ok) console.error('[auth] email send failed', r.status, await r.text());

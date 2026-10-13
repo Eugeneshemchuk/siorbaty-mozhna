@@ -4,11 +4,10 @@ pages_build_output_dir = "dist"
 compatibility_date = "2026-09-01"
 
 [vars]
-# Sender for verification / reset emails. The domain must be onboarded to Cloudflare Email Sending.
+# Sender for verification / reset emails, sent through Resend (resend.com). The domain must be verified there.
 MAIL_FROM = "Сьорбати Можна <noreply@siorbaty-mozhna.com>"
-# Secrets (set with `npx wrangler pages secret put NAME --project-name siorbaty-mozhna`):
-#   CF_ACCOUNT_ID, CF_EMAIL_TOKEN (API token with Email Sending permission).
-# Without CF_EMAIL_TOKEN the links are only logged (local dev: printed by `wrangler pages dev`).
+# Secret (set with `npx wrangler pages secret put RESEND_API_KEY --project-name siorbaty-mozhna`): RESEND_API_KEY.
+# Without it the links are only logged (local dev: printed by `wrangler pages dev`).
 
 [[d1_databases]]
 binding = "DB"
