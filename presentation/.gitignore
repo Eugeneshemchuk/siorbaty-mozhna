@@ -1,0 +1,3 @@
+media/
+# purchased pngtree art: deployed from disk, never in the public repo (see root .gitignore)
+img/sprig-*.png
