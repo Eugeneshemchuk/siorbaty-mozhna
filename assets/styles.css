@@ -337,6 +337,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;display:flex;jus
   .nav .ig{margin-left:auto}
 }
 @media screen and (max-width:420px){
+  .nav{gap:16px}
   .top .ig span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
   .top .ig svg{width:20px;height:20px}
 }
