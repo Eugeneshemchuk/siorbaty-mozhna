@@ -12,7 +12,7 @@ AUTH_HOSTS = "siorbaty-mozhna.com,www.siorbaty-mozhna.com,localhost"
 # Without it the links are only logged (local dev: printed by `wrangler pages dev`).
 # Telegram user IDs allowed to manage students through the bot (functions/api/telegram.js), comma-separated.
 # Its webhook secret TELEGRAM_SECRET is set by scripts/telegram-setup.sh.
-TELEGRAM_ADMINS = ""
+TELEGRAM_ADMINS = "368361854"
 
 [[d1_databases]]
 binding = "DB"
