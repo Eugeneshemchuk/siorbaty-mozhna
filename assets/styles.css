@@ -349,3 +349,27 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;display:flex;jus
 }
 /* keep the header above the hero's ornament disc, which reaches up behind it */
 .top{position:relative;z-index:1}
+
+/* next module button (module page, appears once every lesson is marked watched) */
+.cta.next-mod{background:var(--accent);color:var(--paper)}
+.cta.next-mod:hover{background:transparent;color:var(--accent)}
+.toc .next-mod{margin-top:10px;font-size:.88rem;padding:11px 16px;border-radius:2px;justify-self:stretch;justify-content:space-between}
+.cta[hidden]{display:none}
+
+/* login page (login.html) */
+.auth-hero{grid-template-columns:minmax(0,1fr)}
+.auth{display:grid;gap:18px;max-width:440px;margin-top:28px}
+.auth-tabs{display:flex;gap:24px;border-bottom:1px solid var(--line)}
+.auth-tabs button{background:none;border:0;border-bottom:1px solid transparent;margin-bottom:-1px;padding:0 0 10px;font:inherit;color:var(--muted);cursor:pointer}
+.auth-tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+#authForm{display:grid;gap:16px}
+.field{display:grid;gap:6px}
+.field input{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:12px 14px;width:100%}
+.field input:focus{outline:none;border-color:var(--accent)}
+.auth-hint{color:var(--muted);font-size:.88rem}
+.auth-msg:empty{display:none}
+.auth-msg{padding:12px 14px;border-left:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--paper))}
+.auth-msg.bad{border-color:var(--wrong)}
+.auth-link{justify-self:start;background:none;border:0;padding:0;font:inherit;font-size:.88rem;color:var(--muted);text-decoration:underline;cursor:pointer}
+.auth-link:hover{color:var(--accent)}
+.auth [hidden]{display:none}

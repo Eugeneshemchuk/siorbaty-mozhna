@@ -6,7 +6,7 @@
     get(k){ try { return localStorage.getItem('tea:' + k); } catch { return null; } },
     set(k, v){ try { localStorage.setItem('tea:' + k, v); } catch {} }
   };
-  const getJSON = p => fetch(p).then(r => { if (!r.ok) throw new Error(p); return r.json(); });
+  const getJSON = p => fetch(p).then(r => { if (!r.ok) throw Object.assign(new Error(p), { status: r.status }); return r.json(); });
   const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M4 12h15M14 7l5 5-5 5"/></svg>';
   const LEAF = '<svg viewBox="0 0 24 24"><path d="M5 19C5 10.5 10.6 5 19 5c0 8.4-5.5 14-14 14z"/><path d="M5 19 13.8 10.2"/></svg>';
   const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg>';
@@ -104,7 +104,9 @@
     const id = (hid || '01').replace(/\W/g, '');
     let mod, mods;
     try { [mod, mods] = await Promise.all([getJSON(`modules/${id}.json`), getJSON('modules/index.json')]); }
-    catch { root.innerHTML = '<p class="intro" style="padding-block:80px">Модуль не знайдено. <a href="index.html">Повернутися до списку модулів</a>.</p>'; return; }
+    catch (e) {
+      if (e.status === 401) { location.href = 'login.html?next=' + encodeURIComponent('/module.html'); return; }
+      root.innerHTML = '<p class="intro" style="padding-block:80px">Модуль не знайдено. <a href="index.html">Повернутися до списку модулів</a>.</p>'; return; }
     document.title = `${mod.id} ${mod.title} · Сьорбати Можна`;
     const L = mod.lessons;
     const idx = mods.findIndex(m => m.id === mod.id);
@@ -127,7 +129,7 @@
         <nav class="toc" aria-label="Уроки модуля">
           <span class="label">Уроки</span>
           ${L.map((l, i) => `<button type="button" data-go="${i}" id="toc-${i}"><span class="k">${i + 1}</span><span>${esc(l.title)}</span><span class="dot"></span></button>`).join('')}
-          <div class="progress"><span class="label" id="progLabel"></span><div class="bar"><i id="progBar"></i></div></div>
+          <div class="progress"><span class="label" id="progLabel"></span><div class="bar"><i id="progBar"></i></div>${next ? `<a class="cta next-mod" data-next-mod hidden href="module.html#${next.id}">Перейти до наступного модуля ${ARROW}</a>` : ''}</div>
         </nav>
         <div>
           ${L.map((l, i) => `
@@ -141,7 +143,7 @@
             ${l.images?.length ? `<div class="gallery">${l.images.map((im, k) => `<figure class="reveal"><div class="media">${imgHTML(im, `урок ${i + 1} · ${k + 1}`)}</div>${im.caption ? `<figcaption>${esc(im.caption)}</figcaption>` : ''}</figure>`).join('')}</div>` : ''}
             ${l.quiz?.length ? `<div class="lesson-quiz"><span class="label">Перевірте себе · ${l.quiz.length} питання</span><div class="quiz" id="quiz-${i}"></div></div>` : ''}
             <div class="lesson-foot"><button type="button" class="cta" data-done="${i}" aria-pressed="false">Позначити як переглянутий</button>
-            ${i < L.length - 1 ? `<button type="button" class="cta" data-go="${i + 1}" style="border-color:var(--line);color:var(--muted)">Наступний урок ${ARROW}</button>` : ''}</div>
+            ${i < L.length - 1 ? `<button type="button" class="cta" data-go="${i + 1}" style="border-color:var(--line);color:var(--muted)">Наступний урок ${ARROW}</button>` : `${next ? `<a class="cta next-mod" data-next-mod hidden href="module.html#${next.id}">Перейти до наступного модуля ${ARROW}</a>` : ''}`}</div>
           </article>`).join('')}
           ${next ? `<a class="next" href="module.html#${next.id}"><span class="leafband" aria-hidden="true"></span><div><span class="label">Далі · модуль ${next.id}</span><h3>${esc(next.title)}</h3></div>${ARROW}</a>` : `<a class="next" href="index.html"><span class="leafband" aria-hidden="true"></span><div><span class="label">Усі модулі</span><h3>Повернутися на головну</h3></div>${ARROW}</a>`}
         </div>
@@ -156,6 +158,7 @@
       });
       $('#progLabel').textContent = `${d} / ${L.length} ${lessonsWord(L.length)}`;
       $('#progBar').style.setProperty('--p', `${d / L.length * 100}%`);
+      root.querySelectorAll('[data-next-mod]').forEach(a => { a.hidden = d < L.length; });
     };
     root.addEventListener('click', e => {
       const go = e.target.closest('[data-go]'), done = e.target.closest('[data-done]');
@@ -209,8 +212,68 @@
     show();
   }
 
+  /* ---------- account ---------- */
+  const api = (path, data) => fetch('/api/auth/' + path, data ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) } : {})
+    .then(async r => ({ ok: r.ok, status: r.status, ...(await r.json().catch(() => ({}))) }));
+
+  async function accountLink(nav) {
+    const me = await api('me').catch(() => ({}));
+    const a = document.createElement('a');
+    a.className = 'nav-account';
+    if (me.email) {
+      a.href = '#'; a.textContent = 'Вийти'; a.title = me.email;
+      a.addEventListener('click', async e => { e.preventDefault(); await api('logout', {}); location.href = 'index.html'; });
+    } else if (!location.pathname.startsWith('/login')) { a.href = 'login.html'; a.textContent = 'Увійти'; }
+    else return;
+    nav.insertBefore(a, $('.ig', nav));
+  }
+
+  function authPage(box) {
+    const form = $('#authForm'), msg = $('#authMsg'), title = $('#authTitle'), submit = $('#authSubmit');
+    const pw = form.elements.password;
+    const next = (() => { const n = new URLSearchParams(location.search).get('next') || ''; return /^\/(?!\/)/.test(n) ? n : 'module.html'; })();
+    let mode = 'login', token = '';
+    const MODES = {
+      login:    { title: 'Вхід', submit: 'Увійти', email: true, pw: 'current-password' },
+      register: { title: 'Реєстрація', submit: 'Зареєструватися', email: true, pw: 'new-password' },
+      forgot:   { title: 'Відновлення пароля', submit: 'Надіслати посилання', email: true, pw: null },
+      reset:    { title: 'Новий пароль', submit: 'Зберегти пароль', email: false, pw: 'new-password' },
+    };
+    const say = (text, bad) => { msg.textContent = text || ''; msg.classList.toggle('bad', !!bad); };
+    const set = (m, keepMsg) => {
+      mode = m; const M = MODES[m];
+      title.textContent = M.title; submit.textContent = M.submit;
+      $('[data-for="email"]', form).hidden = !M.email; form.elements.email.required = M.email;
+      $('[data-for="password"]', form).hidden = !M.pw; pw.required = !!M.pw;
+      if (M.pw) pw.autocomplete = M.pw;
+      box.querySelectorAll('[data-for]:not(.field)').forEach(el => { el.hidden = !el.dataset.for.split(' ').includes(m); });
+      box.querySelectorAll('.auth-tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.mode === m));
+      $('.auth-tabs', box).hidden = !(m === 'login' || m === 'register');
+      if (!keepMsg) say('');
+    };
+    box.addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (b) set(b.dataset.mode); });
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const email = form.elements.email.value, password = pw.value;
+      submit.disabled = true; say('');
+      const r = await api(mode, mode === 'reset' ? { token, password } : mode === 'forgot' ? { email } : { email, password })
+        .catch(() => ({ error: 'Немає з’єднання. Спробуйте ще раз.' }));
+      submit.disabled = false;
+      if (r.error) return say(r.error, true);
+      if (mode === 'login' || mode === 'reset') { location.href = next; return; }
+      say(r.message); form.reset();
+    });
+    const h = location.hash;
+    if (h.startsWith('#reset=')) { token = h.slice(7); history.replaceState(null, '', location.pathname); set('reset'); }
+    else if (h === '#expired') { set('register'); say('Посилання застаріло або вже використане. Зареєструйтеся ще раз, щоб отримати новий лист.', true); }
+    else set('login');
+  }
+
   /* ---------- boot ---------- */
-  const list = $('#moduleList'), grid = $('#iconGrid'), mod = $('#module');
+  const list = $('#moduleList'), grid = $('#iconGrid'), mod = $('#module'), auth = $('#auth'), nav = $('.top .nav');
+  if (nav) accountLink(nav);
+  if (auth) authPage(auth);
   if (list) renderHome(list).catch(() => { list.innerHTML = '<li class="row"><p>Не вдалося завантажити модулі.</p></li>'; });
   if (grid) renderIcons(grid).catch(() => {});
   if (mod) { renderModule(mod); addEventListener('hashchange', () => { if (!location.hash.includes('-')) lenis ? lenis.scrollTo(0, { immediate: true }) : scrollTo(0, 0); renderModule(mod); }); }

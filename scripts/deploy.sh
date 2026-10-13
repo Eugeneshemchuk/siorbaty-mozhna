@@ -1,6 +1,7 @@
 #!/bin/sh
 # Copy only the public site files into dist/ and deploy them to Cloudflare Pages.
 # Content/ (raw photos, transcripts, purchased source art) and scripts/ are never uploaded.
+# functions/ (login gate + auth API) is picked up from the repo root; bindings live in wrangler.toml.
 # Run from the repo root: sh scripts/deploy.sh
 set -e
 rm -rf dist && mkdir dist
