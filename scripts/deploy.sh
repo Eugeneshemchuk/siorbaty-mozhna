@@ -1,8 +1,8 @@
 #!/bin/sh
 # Copy only the public site files into dist/ and deploy them to Cloudflare Pages.
 # Content/ (raw photos, transcripts, purchased source art) and scripts/ are never uploaded.
-# presentation/ (sales deck, login-only via functions/_middleware.js) ships with its own two sprig PNGs and the
-# git-ignored demo video in presentation/media/ when it exists locally.
+# presentation/ (sales deck, login-only via functions/_middleware.js) ships with its git-ignored local files:
+# two sprig PNGs and the presenter photo (presentation/img/).
 # functions/ (login gate + auth API) is picked up from the repo root; bindings live in wrangler.toml.
 # Run from the repo root: sh scripts/deploy.sh
 set -e

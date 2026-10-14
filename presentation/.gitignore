@@ -1,3 +1,4 @@
-media/
 # purchased pngtree art: deployed from disk, never in the public repo (see root .gitignore)
 img/sprig-*.png
+# photo with guests' faces: deployed from disk, kept out of the public repo
+img/valentyna.webp

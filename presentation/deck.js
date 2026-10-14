@@ -1,8 +1,7 @@
 /* Deck controls.
    → / Space / PageDown / click: next step, then next slide.   ← / PageUp: back.
-   F: fullscreen.   G: toggle the video-area guide.   V: toggle the placeholder video.   M: mute / unmute it.
-   Browsers only autoplay muted video, so the sound comes on with the first click or key press.   Home / End: first / last slide.
-   URL hash #3 opens slide 3. ?guide shows the guide on load. ?all reveals every step (for stills). The placeholder video shows by default; ?clean starts without it (for recording). */
+   F: fullscreen.   G: toggle the video-area guide.   Home / End: first / last slide.
+   URL hash #3 opens slide 3. ?guide shows the guide on load. ?all reveals every step (for stills). */
 (() => {
   const stage = document.querySelector(".stage");
   const slides = [...document.querySelectorAll(".slide")];
@@ -56,24 +55,9 @@
     else if (k === "End") show(slides.length - 1, true);
     else if (k === "f" || k === "F") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
     else if (k === "g" || k === "G") document.body.classList.toggle("guide");
-    else if (k === "v" || k === "V") demo(!document.body.classList.contains("demo"));
-    else if (k === "m" || k === "M") { video.muted = !video.muted; soundSet = true; }
   });
   stage.addEventListener("click", next);
 
-  const video = document.querySelector(".demo-video");
-  function demo(on) {
-    document.body.classList.toggle("demo", on);
-    if (!on) return video.pause();
-    if (video.readyState === 0) { video.preload = "auto"; video.load(); }
-    video.play().catch(() => {});
-  }
-
   if (params.has("guide")) document.body.classList.add("guide");
-  demo(!params.has("clean"));
-  let soundSet = false;
-  const unmute = () => { if (!soundSet) { soundSet = true; video.muted = false; } };
-  addEventListener("keydown", e => { if (e.key !== "m" && e.key !== "M") unmute(); }, true);
-  addEventListener("pointerdown", unmute, true);
   show((parseInt(location.hash.slice(1), 10) || 1) - 1);
 })();
