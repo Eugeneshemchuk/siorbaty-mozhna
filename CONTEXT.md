@@ -9,7 +9,7 @@ url: https://siorbaty-mozhna.com
 deploy: scripts/deploy.sh
 repo: .
 next: waiting for input from site owner
-updated: 2026-10-27
+updated: 2026-10-28
 idea_at: 2026-10-12
 mvp_at: 
 prod_at: 
