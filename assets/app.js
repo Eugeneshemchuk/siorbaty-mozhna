@@ -50,7 +50,7 @@
   function videoHTML(url, label) {
     const yt = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
     const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-    if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}?rel=0" title="${esc(label)}" allow="encrypted-media; picture-in-picture; fullscreen" loading="lazy"></iframe>`;
+    if (yt) return `<iframe class="yt" src="https://www.youtube-nocookie.com/embed/${yt[1]}?rel=0" title="${esc(label)}" allow="encrypted-media; picture-in-picture; fullscreen" loading="lazy"></iframe>`;
     if (vm) return `<iframe src="https://player.vimeo.com/video/${vm[1]}?dnt=1" title="${esc(label)}" allow="fullscreen; picture-in-picture" loading="lazy"></iframe>`;
     if (/\.(mp4|webm)(\?|$)/i.test(url)) return `<video src="${esc(url)}" controls preload="metadata" playsinline></video>`;
     if (url) return `<a class="play" href="${esc(url)}" target="_blank" rel="noopener" aria-label="Відкрити відео: ${esc(label)}">${PLAY}</a>`;
